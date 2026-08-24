@@ -1,25 +1,31 @@
 import React from 'react';
-import { theme } from '../theme.js';
+import { theme, metal, glintPath } from '../theme.js';
 
 export const Icon = ({
     name: e,
     size: t = 22,
     color: l = theme.sub,
-    strokeWidth: n = 1.5
+    strokeWidth: n = 1.5,
+    glow: g = false,
+    gradient: gr = null
   }) => {
-    let i = {
+    let gid = React.useId().replace(/:/g, ""),
+      strokeColor = gr ? `url(#icongrad-${gid})` : l,
+      i = {
         width: t,
         height: t,
         display: "block",
-        flexShrink: 0
+        flexShrink: 0,
+        filter: g ? `drop-shadow(0 0 3px ${l}aa)` : "none"
       },
       a = {
         fill: "none",
-        stroke: l,
+        stroke: strokeColor,
         strokeWidth: n,
         strokeLinecap: "round",
         strokeLinejoin: "round"
-      };
+      },
+      defs = gr ? <defs><linearGradient id={`icongrad-${gid}`} x1={"0"} y1={"0"} x2={"1"} y2={"1"}><stop offset={"0%"} stopColor={gr[0]} /><stop offset={"100%"} stopColor={gr[1]} /></linearGradient></defs> : null;
     switch (e) {
       case "home":
         return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H15v-5h-6v5H4a1 1 0 01-1-1V9.5z"} />}</svg>;
@@ -30,7 +36,7 @@ export const Icon = ({
       case "progress":
         return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M3 20h18M3 20V4"} />}{<polyline {...a} points={"6,16 10,10 14,13 19,6"} />}{<circle fill={l} stroke={"none"} cx={"19"} cy={"6"} r={"2"} />}</svg>;
       case "gear":
-        return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M12 15a3 3 0 100-6 3 3 0 000 6z"} />}{<path {...a} d={"M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"} />}</svg>;
+        return <svg viewBox={"0 0 24 24"} style={i}>{defs}{<path {...a} d={"M12 15a3 3 0 100-6 3 3 0 000 6z"} />}{<path {...a} d={"M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"} />}</svg>;
       case "chevron-left":
         return <svg viewBox={"0 0 24 24"} style={i}>{<polyline {...a} points={"15,18 9,12 15,6"} />}</svg>;
       case "chevron-right":
@@ -67,10 +73,22 @@ export const Icon = ({
         return <svg viewBox={"0 0 24 24"} style={i}>{<line {...a} x1={"5"} y1={"12"} x2={"19"} y2={"12"} />}</svg>;
       case "x":
         return <svg viewBox={"0 0 24 24"} style={i}>{<line {...a} x1={"18"} y1={"6"} x2={"6"} y2={"18"} />}{<line {...a} x1={"6"} y1={"6"} x2={"18"} y2={"18"} />}</svg>;
-      default:
-        return null;
+      case "fire":
+        return <svg viewBox={"0 0 24 24"} style={i}>{<path d={"M12 2C9 5.5 6.8 8.7 6.8 12a5.2 5.2 0 0010.4 0c0-2.2-1-4-2.2-5.5.3 2-.6 3.4-1.9 3.4-1.4 0-2.1-1.2-1.7-2.7C11.9 5.7 12.8 4 12 2z"} fill={l} stroke={"none"} />}{<path d={"M12 10.5c-1 1.3-1.7 2.4-1.7 3.6a1.9 1.9 0 003.8 0c0-.8-.3-1.4-.7-2 .05.7-.25 1.1-.7 1.1-.5 0-.8-.4-.6-1 .2-.7.5-1.1-.1-1.7z"} fill={"#FFFBEF"} fillOpacity={"0.55"} stroke={"none"} />}</svg>;
+      case "heart-pulse":
+        return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M12.5 20.2c-.3.2-.7.2-1 0C8.4 18.4 3 13.9 3 9.6A5 5 0 0112 6.4a5 5 0 019 3.2c0 1.7-.9 3.3-2 4.7"} />}{<path {...a} d={"M2.7 12h3.6l1.6-3 2 5 1.6-3.5h4.2"} />}</svg>;
+      case "kettlebell":
+        return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M9 9a3 3 0 016 0v1.2H9V9z"} />}{<rect {...a} x={"6.8"} y={"10"} width={"10.4"} height={"9.5"} rx={"5.2"} />}</svg>;
     }
   };
+
+export const AsteriaMark = ({
+    size: e = 28,
+    outer: t = theme.text,
+    spark: l = theme.gold
+  }) => <svg viewBox={"0 0 100 100"} width={e} height={e} style={{
+      flexShrink: 0
+    }}>{<polygon points={"50,6 82,94 64,94 50,46 36,94 18,94"} fill={t} />}{<polygon points={"50,56 61,80 39,80"} fill={l} />}</svg>;
 
 export const Badge = ({
     color: e,
@@ -98,31 +116,56 @@ export const PrimaryButton = ({
     outline: i = false,
     disabled: a = false,
     small: o = false
-  }) => <button onClick={e} disabled={a} style={{
-      background: i ? "transparent" : a ? "#2a2a35" : t,
-      color: i ? t : a ? theme.muted : theme.white,
-      border: i ? `1.5px solid ${t}` : "none",
-      borderRadius: 10,
+  }) => {
+    let isGold = t === theme.gold && !i && !a;
+    return <button onClick={e} disabled={a} style={{
+      position: "relative",
+      background: i ? "transparent" : a ? "#2a2a35" : isGold ? `radial-gradient(ellipse 46% 60% at 50% 6%, rgba(255,248,224,0.85), rgba(255,248,224,0) 68%), ${metal.grain}, ${metal.goldSurface}` : t,
+      backgroundSize: isGold ? "100% 100%, 6px 6px, 220% 220%" : undefined,
+      color: i ? t : a ? theme.muted : isGold ? theme.black : theme.white,
+      border: i ? `1.5px solid ${t}` : isGold ? "1px solid rgba(122,86,26,0.75)" : "none",
+      boxShadow: isGold ? `${metal.glowGoldTight}, inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 2px rgba(60,40,0,0.3)` : "none",
+      borderRadius: 11,
       padding: o ? "7px 12px" : "11px 16px",
       fontWeight: 700,
       fontSize: o ? 11 : 13,
       cursor: a ? "not-allowed" : "pointer",
-      letterSpacing: "0.02em",
+      letterSpacing: "0.04em",
+      textTransform: "uppercase",
       fontFamily: "inherit",
       width: "100%",
+      overflow: "hidden",
       opacity: a ? 0.5 : 1,
       ...n
-    }}>{l}</button>;
+    }}>{isGold && <svg viewBox={"0 0 100 100"} style={{
+      position: "absolute",
+      width: 15,
+      height: 15,
+      left: 10,
+      top: 4,
+      opacity: 0.8,
+      pointerEvents: "none"
+    }}>{<path d={glintPath} fill={"#FFFBEF"} />}</svg>}{isGold && <svg viewBox={"0 0 100 100"} style={{
+      position: "absolute",
+      width: 10,
+      height: 10,
+      right: 14,
+      bottom: 6,
+      opacity: 0.55,
+      pointerEvents: "none"
+    }}>{<path d={glintPath} fill={"#FFFBEF"} />}</svg>}{l}</button>;
+  };
 
 export const Card = ({
     children: e,
     style: t = {}
   }) => <div style={{
-      background: theme.steel,
-      borderRadius: 12,
-      padding: "12px 14px",
+      backgroundImage: metal.steelGradient,
+      borderRadius: 18,
+      padding: "16px 18px",
       marginBottom: 8,
       border: `1px solid ${theme.border}`,
+      boxShadow: metal.insetTop,
       ...t
     }}>{e}</div>;
 

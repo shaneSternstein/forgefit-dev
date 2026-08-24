@@ -1,7 +1,7 @@
 import React from 'react';
 import { addDays, dayAt, getToday, getWeekAndDay, isRoutineMode, makeRoutinePhase, parseDateKey, phaseForWeek, phaseKey, resolveCardio, startOfWeek, toDateKey } from '../utils.js';
-import { CATEGORY_COLORS, theme } from '../theme.js';
-import { Badge, Card, Label, PrimaryButton } from '../components/ui.jsx';
+import { CATEGORY_COLORS, theme, metal, gradientText, topLitGoldBorder } from '../theme.js';
+import { Badge, Card, Icon, Label, PrimaryButton } from '../components/ui.jsx';
 
 export function HomeScreen({
   settings: e,
@@ -34,7 +34,7 @@ export function HomeScreen({
     }, (d, r) => toDateKey(addDays(T, r))).filter(d => l[d]).length;
   return <div style={{
       padding: "16px 16px 0",
-      fontFamily: "system-ui,sans-serif"
+      fontFamily: "'Inter',system-ui,sans-serif"
     }}>{<div style={{
       display: "flex",
       justifyContent: "space-between",
@@ -42,23 +42,27 @@ export function HomeScreen({
       marginBottom: 16
     }}>{<div>{<div style={{
       fontSize: 11,
-      color: theme.muted,
+      color: theme.gold,
       fontFamily: "monospace",
-      letterSpacing: "0.12em",
+      letterSpacing: "0.16em",
       textTransform: "uppercase",
       marginBottom: 4
-    }}>{"ForgeFit"}</div>}{<div style={{
-      fontSize: 22,
-      fontWeight: 800,
-      color: theme.text
+    }}>{"Asteria"}</div>}{<div style={{
+      fontSize: 27,
+      fontWeight: 700,
+      fontFamily: "'Bebas Neue',system-ui,sans-serif",
+      letterSpacing: "0.01em",
+      textTransform: "uppercase",
+      textShadow: metal.bevelSilver,
+      ...gradientText(metal.silverText)
     }}>{(() => {
     let d = (/* @__PURE__ */new Date()).getHours();
     return d < 12 ? "Good morning" : d < 17 ? "Good afternoon" : "Good evening";
   })()}{", Shane."}</div>}</div>}</div>}{m ? <div style={{
-      background: "rgba(16,185,129,0.08)",
-      border: "1px solid rgba(16,185,129,0.2)",
-      borderRadius: 12,
-      padding: "10px 14px",
+      backgroundImage: metal.carbonGradient,
+      border: `1px solid ${theme.border}`,
+      borderRadius: 18,
+      padding: "16px 18px",
       marginBottom: 12
     }}>{<div style={{
       display: "flex",
@@ -81,41 +85,55 @@ export function HomeScreen({
       color: theme.sub,
       lineHeight: 1.5
     }}>{"Running your Week 12 routine on repeat. Edit it anytime from the Program tab."}</div>}</div> : <div style={{
-      background: "rgba(245,158,11,0.08)",
-      border: "1px solid rgba(245,158,11,0.2)",
-      borderRadius: 12,
-      padding: "10px 14px",
+      ...topLitGoldBorder(metal.carbonGradient),
+      boxShadow: `${metal.glowGoldSoft}, ${metal.insetTop}`,
+      borderRadius: 18,
+      padding: "16px 18px",
       marginBottom: 12
     }}>{<div style={{
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 6
+      alignItems: "baseline",
+      marginBottom: 10
     }}>{<span style={{
-      fontSize: 10,
-      fontFamily: "monospace",
-      color: theme.phase,
-      textTransform: "uppercase",
-      letterSpacing: "0.12em"
-    }}>{y.label}{" — Wk "}{c}</span>}{<span style={{
-      fontSize: 11,
+      fontSize: 20,
       fontWeight: 700,
-      color: theme.phase
-    }}>{c}{"/12"}</span>}</div>}{<div style={{
-      height: 3,
+      fontFamily: "'Bebas Neue',system-ui,sans-serif",
+      letterSpacing: "0.06em",
+      textTransform: "uppercase",
+      textShadow: metal.bevelSilver,
+      ...gradientText(metal.silverText)
+    }}>{"WK "}{c}</span>}{<span style={{
+      fontSize: 14,
+      fontWeight: 700,
+      fontFamily: "monospace",
+      textShadow: metal.bevelGold,
+      ...gradientText(metal.goldText)
+    }}>{c}{" / 12"}</span>}</div>}{<div style={{
+      height: 5,
       background: theme.border,
-      borderRadius: 2,
+      borderRadius: 3,
       overflow: "hidden"
     }}>{<div style={{
+      position: "relative",
       height: "100%",
-      background: theme.phase,
-      borderRadius: 2,
+      background: metal.goldBar,
+      boxShadow: metal.glowGoldSoft,
+      borderRadius: 3,
       width: `${(c - 1) / 12 * 100}%`,
-      transition: "width 0.4s"
-    }} />}</div>}{<div style={{
+      transition: "width 0.4s",
+      overflow: "hidden"
+    }}>{<div style={{
+      position: "absolute",
+      top: "-60%",
+      left: "55%",
+      width: "34%",
+      height: "220%",
+      background: metal.barHotspot
+    }} />}</div>}</div>}{<div style={{
       fontSize: 11,
       color: theme.sub,
-      marginTop: 6,
+      marginTop: 9,
       lineHeight: 1.5
     }}>{y.weekFocus?.[(c - 1) % 4] || y.desc || ""}</div>}</div>}{<div style={{
       display: "grid",
@@ -125,50 +143,77 @@ export function HomeScreen({
     }}>{[{
     val: h,
     label: "Streak",
-    color: theme.push
+    color: theme.gold,
+    icon: "fire"
   }, {
     val: `${M}/${n.filter(Rd => resolveCardio(Rd, phaseKey(y))).length}`,
     label: "Cardio",
-    color: theme.pelo
+    color: theme.platinum,
+    icon: "heart-pulse"
   }, {
     val: E,
     label: "PRs",
-    color: theme.legs
+    color: theme.text,
+    icon: "kettlebell"
   }].map(d => <div key={d.label} style={{
-      background: theme.steel,
-      borderRadius: 10,
-      padding: "10px 8px",
+      backgroundImage: metal.steelGradient,
+      borderRadius: 14,
+      padding: "22px 10px 20px",
+      minHeight: 118,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
       textAlign: "center",
-      border: `1px solid ${theme.border}`
-    }}>{<div style={{
-      fontSize: 20,
-      fontWeight: 800,
-      fontFamily: "monospace",
-      color: d.color,
-      lineHeight: 1
+      border: `1px solid ${theme.border}`,
+      boxShadow: metal.insetTop
+    }}>{<Icon name={d.icon} size={22} color={d.color} strokeWidth={1.6} glow={true} />}{<div style={{
+      fontSize: 23,
+      fontWeight: 700,
+      fontFamily: "'Bebas Neue',system-ui,sans-serif",
+      lineHeight: 1,
+      marginTop: 9,
+      textShadow: d.color === theme.gold ? "0 1px 2px rgba(0,0,0,0.4), 0 0 10px rgba(212,153,61,0.35)" : "0 1px 2px rgba(0,0,0,0.4), 0 0 8px rgba(255,255,255,0.2)",
+      ...gradientText(d.color === theme.gold ? metal.goldText : metal.silverText)
     }}>{d.val}</div>}{<div style={{
       fontSize: 9,
       color: theme.muted,
-      marginTop: 3,
+      marginTop: 5,
       textTransform: "uppercase",
       letterSpacing: "0.1em"
     }}>{d.label}</div>}</div>)}</div>}{b ? <Card style={{
-      border: `1px solid ${b.color || CATEGORY_COLORS[b.type]}44`
+      border: `1px solid ${theme.border}`,
+      backgroundImage: metal.carbonGradient,
+      boxShadow: metal.insetTop
     }}>{<div style={{
       display: "flex",
       justifyContent: "space-between",
       alignItems: "flex-start",
-      marginBottom: 8
+      marginBottom: 12
     }}>{<div>{<Label style={{
-      marginBottom: 2
+      marginBottom: 4,
+      color: theme.gold,
+      fontFamily: "monospace"
     }}>{"Today"}</Label>}{<div style={{
-      fontSize: 17,
+      fontSize: 24,
       fontWeight: 700,
-      color: theme.text
+      fontFamily: "'Bebas Neue',system-ui,sans-serif",
+      letterSpacing: "0.01em",
+      textTransform: "uppercase",
+      textShadow: metal.bevelSilver,
+      ...gradientText(metal.silverText)
     }}>{b.label}</div>}{<div style={{
-      fontSize: 12,
-      color: theme.sub
-    }}>{b.exercises.length}{" exercises"}</div>}</div>}{<Badge color={b.color || CATEGORY_COLORS[b.type]}>{b.type.toUpperCase()}</Badge>}</div>}{<PrimaryButton onClick={() => i("sessions")} color={b.color || CATEGORY_COLORS[b.type]} outline={!!t[p]}>{t[p] ? "View Today's Session" : "Begin " + b.label}</PrimaryButton>}</Card> : <Card>{<div style={{
+      fontSize: 11,
+      color: theme.sub,
+      marginTop: 3,
+      textTransform: "uppercase",
+      letterSpacing: "0.06em"
+    }}>{b.exercises.length}{" exercises"}</div>}</div>}{<Badge color={theme.gold} bg={"transparent"} style={{
+      border: `1px solid ${theme.gold}`,
+      borderRadius: 20,
+      padding: "4px 12px",
+      boxShadow: metal.glowGoldSoft
+    }}>{b.type.toUpperCase()}</Badge>}</div>}{<PrimaryButton onClick={() => i("sessions")} color={theme.gold} outline={!!t[p]}>{t[p] ? "View Today's Session" : "Begin " + b.label}</PrimaryButton>}</Card> : <Card>{<div style={{
       fontSize: 16,
       fontWeight: 700,
       color: theme.text,
