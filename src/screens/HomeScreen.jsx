@@ -41,22 +41,21 @@ export function HomeScreen({
       alignItems: "flex-start",
       marginBottom: 16
     }}>{<div>{<div style={{
-      fontSize: 22,
+      fontSize: 18,
       fontFamily: "'Roboto Condensed',sans-serif",
-      fontWeight: 300,
-      letterSpacing: "0.16em",
+      fontWeight: 400,
+      letterSpacing: "0.1em",
       textTransform: "uppercase",
       marginBottom: 6,
       ...gradientText(metal.eyebrowTan)
     }}>{"Asteria"}</div>}{<div style={{
-      fontSize: 54,
+      fontSize: 40,
       fontWeight: 700,
       fontFamily: "'Bebas Neue',system-ui,sans-serif",
       letterSpacing: "0.05em",
       textTransform: "uppercase",
       lineHeight: 1.05,
-      WebkitTextStroke: "1.5px #EEF2F3",
-      textShadow: "0 3px 6px rgba(0,0,0,0.4)",
+      textShadow: "0 -1px 0 #EEF2F3, 0 1px 1px rgba(0,0,0,0.6), 0 3px 6px rgba(0,0,0,0.35)",
       ...gradientText(metal.greetingSilver)
     }}>{(() => {
     let d = (/* @__PURE__ */new Date()).getHours();
