@@ -36,7 +36,7 @@ export const metal = {
   eyebrowGold: `linear-gradient(180deg, #FFDD82 0%, #E8B34F 45%, #C4832A 100%)`,
   // Exact two-stop gradients per direct spec, top to bottom.
   greetingSilver: `linear-gradient(180deg, #EEF2F3 0%, #55565A 100%)`,
-  eyebrowTan: `linear-gradient(180deg, #CCC59C 0%, #BD995F 100%)`,
+  eyebrowTan: `linear-gradient(180deg, #CCC59C 0%, #BD8B3B 100%)`,
   // Button fill: dark on the outer edges, brightest in the center,
   // matching the reference's "lit from the middle" metal bar look.
   goldSurfaceH: `linear-gradient(90deg, #6E4F17 0%, #C4832A 16%, #EFC978 38%, #F7EBC8 50%, #EFC978 62%, #C4832A 84%, #6E4F17 100%)`,
