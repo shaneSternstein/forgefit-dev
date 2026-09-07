@@ -166,18 +166,19 @@ export function App() {
       fontWeight: 800,
       color: theme.pelo
     }}>{String(Math.floor(O / 60)).padStart(2, "0")}{":"}{String(O % 60).padStart(2, "0")}</span>}</button>}{<button onClick={() => T(true)} style={{
-      background: theme.steel,
-      border: `1px solid rgba(212,153,61,0.45)`,
-      boxShadow: metal.glowGold,
-      borderRadius: 13,
-      width: 42,
-      height: 42,
+      backgroundImage: `radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12), transparent 45%), linear-gradient(${theme.steel}, ${theme.steel}), ${metal.borderDiagonalGold}`,
+      backgroundOrigin: "padding-box, padding-box, border-box",
+      backgroundClip: "padding-box, padding-box, border-box",
+      border: "1.5px solid transparent",
+      borderRadius: 10,
+      width: 44,
+      height: 44,
       padding: 0,
       cursor: "pointer",
       display: "flex",
       alignItems: "center",
       justifyContent: "center"
-    }}>{<Icon name={"gear"} size={20} color={theme.gold} gradient={["#F7EBC8", "#A97A24"]} glow={true} />}</button>}</div>}</div>}{<div style={{
+    }}>{<Icon name={"gear"} size={25} color={theme.gold} gradient={["#F7EBC8", "#A97A24"]} />}</button>}</div>}</div>}{<div style={{
       flex: 1,
       overflowY: "auto",
       paddingBottom: 80,
@@ -189,8 +190,8 @@ export function App() {
       left: 0,
       right: 0,
       zIndex: 40,
-      background: theme.carbon,
-      borderTop: `1px solid ${theme.border}`,
+      background: theme.black,
+      borderTop: `1px solid rgba(230,230,235,0.05)`,
       display: "flex",
       paddingBottom: "env(safe-area-inset-bottom,8px)"
     }}>{ze.map(Q => {
@@ -206,7 +207,7 @@ export function App() {
         alignItems: "center",
         gap: 3,
         position: "relative"
-      }}>{<Icon name={Q.icon} size={22} color={Me ? theme.gold : theme.muted} strokeWidth={Me ? 2 : 1.5} glow={Me} />}{<span style={{
+      }}>{<Icon name={Q.icon} size={25} color={Me ? theme.gold : theme.muted} strokeWidth={Me ? 2 : 1.5} glow={Me} gradient={Me ? ["#F7EBC8", "#A97A24", "0", "1"] : null} />}{<span style={{
         fontSize: 9,
         fontFamily: "monospace",
         letterSpacing: "0.06em",

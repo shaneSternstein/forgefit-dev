@@ -10,13 +10,15 @@ export const Icon = ({
     gradient: gr = null
   }) => {
     let gid = React.useId().replace(/:/g, ""),
-      strokeColor = gr ? `url(#icongrad-${gid})` : l,
+      gradUrl = `url(#icongrad-${gid})`,
+      strokeColor = gr ? gradUrl : l,
+      fillColor = gr ? gradUrl : l,
       i = {
         width: t,
         height: t,
         display: "block",
         flexShrink: 0,
-        filter: g ? `drop-shadow(0 0 3px ${l}aa)` : "none"
+        filter: g ? `drop-shadow(0 0 2px ${l}88)` : "none"
       },
       a = {
         fill: "none",
@@ -25,7 +27,7 @@ export const Icon = ({
         strokeLinecap: "round",
         strokeLinejoin: "round"
       },
-      defs = gr ? <defs><linearGradient id={`icongrad-${gid}`} x1={"0"} y1={"0"} x2={"1"} y2={"1"}><stop offset={"0%"} stopColor={gr[0]} /><stop offset={"100%"} stopColor={gr[1]} /></linearGradient></defs> : null;
+      defs = gr ? <defs><linearGradient id={`icongrad-${gid}`} x1={"0"} y1={"0"} x2={gr[2] || "1"} y2={gr[3] || "1"}><stop offset={"0%"} stopColor={gr[0]} /><stop offset={"100%"} stopColor={gr[1]} /></linearGradient></defs> : null;
     switch (e) {
       case "home":
         return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H15v-5h-6v5H4a1 1 0 01-1-1V9.5z"} />}</svg>;
@@ -74,11 +76,11 @@ export const Icon = ({
       case "x":
         return <svg viewBox={"0 0 24 24"} style={i}>{<line {...a} x1={"18"} y1={"6"} x2={"6"} y2={"18"} />}{<line {...a} x1={"6"} y1={"6"} x2={"18"} y2={"18"} />}</svg>;
       case "fire":
-        return <svg viewBox={"0 0 24 24"} style={i}>{<path d={"M12 2C9 5.5 6.8 8.7 6.8 12a5.2 5.2 0 0010.4 0c0-2.2-1-4-2.2-5.5.3 2-.6 3.4-1.9 3.4-1.4 0-2.1-1.2-1.7-2.7C11.9 5.7 12.8 4 12 2z"} fill={l} stroke={"none"} />}{<path d={"M12 10.5c-1 1.3-1.7 2.4-1.7 3.6a1.9 1.9 0 003.8 0c0-.8-.3-1.4-.7-2 .05.7-.25 1.1-.7 1.1-.5 0-.8-.4-.6-1 .2-.7.5-1.1-.1-1.7z"} fill={"#FFFBEF"} fillOpacity={"0.55"} stroke={"none"} />}</svg>;
+        return <svg viewBox={"0 0 24 24"} style={i}>{defs}{<path d={"M12 2C9 5.5 6.8 8.7 6.8 12a5.2 5.2 0 0010.4 0c0-2.2-1-4-2.2-5.5.3 2-.6 3.4-1.9 3.4-1.4 0-2.1-1.2-1.7-2.7C11.9 5.7 12.8 4 12 2z"} fill={fillColor} stroke={"none"} />}{<path d={"M12 10.5c-1 1.3-1.7 2.4-1.7 3.6a1.9 1.9 0 003.8 0c0-.8-.3-1.4-.7-2 .05.7-.25 1.1-.7 1.1-.5 0-.8-.4-.6-1 .2-.7.5-1.1-.1-1.7z"} fill={"#FFFBEF"} fillOpacity={"0.6"} stroke={"none"} />}</svg>;
       case "heart-pulse":
-        return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M12.5 20.2c-.3.2-.7.2-1 0C8.4 18.4 3 13.9 3 9.6A5 5 0 0112 6.4a5 5 0 019 3.2c0 1.7-.9 3.3-2 4.7"} />}{<path {...a} d={"M2.7 12h3.6l1.6-3 2 5 1.6-3.5h4.2"} />}</svg>;
+        return <svg viewBox={"0 0 24 24"} style={i}>{defs}{<path {...a} d={"M12.5 20.2c-.3.2-.7.2-1 0C8.4 18.4 3 13.9 3 9.6A5 5 0 0112 6.4a5 5 0 019 3.2c0 1.7-.9 3.3-2 4.7"} />}{<path {...a} d={"M2.7 12h3.6l1.6-3 2 5 1.6-3.5h4.2"} />}</svg>;
       case "kettlebell":
-        return <svg viewBox={"0 0 24 24"} style={i}>{<path {...a} d={"M9 9a3 3 0 016 0v1.2H9V9z"} />}{<rect {...a} x={"6.8"} y={"10"} width={"10.4"} height={"9.5"} rx={"5.2"} />}</svg>;
+        return <svg viewBox={"0 0 24 24"} style={i}>{defs}{<path {...a} d={"M8.7 9.3a3.3 3.3 0 016.6 0v1.4H8.7V9.3z"} />}{<circle {...a} cx={"12"} cy={"15.3"} r={"5.2"} />}</svg>;
     }
   };
 
@@ -120,13 +122,15 @@ export const PrimaryButton = ({
     let isGold = t === theme.gold && !i && !a;
     return <button onClick={e} disabled={a} style={{
       position: "relative",
-      background: i ? "transparent" : a ? "#2a2a35" : isGold ? `radial-gradient(ellipse 46% 60% at 50% 6%, rgba(255,248,224,0.85), rgba(255,248,224,0) 68%), ${metal.grain}, ${metal.goldSurface}` : t,
-      backgroundSize: isGold ? "100% 100%, 6px 6px, 220% 220%" : undefined,
+      backgroundImage: isGold ? `radial-gradient(ellipse 46% 75% at 50% 0%, rgba(255,248,224,0.9), rgba(255,248,224,0) 65%), ${metal.grain}, ${metal.goldSurfaceH}, ${metal.borderRadialGold}` : i ? "none" : `linear-gradient(${a ? "#2a2a35" : t}, ${a ? "#2a2a35" : t})`,
+      backgroundSize: isGold ? "100% 100%, 6px 6px, 100% 100%, 100% 100%" : undefined,
+      backgroundOrigin: isGold ? "padding-box, padding-box, padding-box, border-box" : undefined,
+      backgroundClip: isGold ? "padding-box, padding-box, padding-box, border-box" : undefined,
       color: i ? t : a ? theme.muted : isGold ? theme.black : theme.white,
-      border: i ? `1.5px solid ${t}` : isGold ? "1px solid rgba(122,86,26,0.75)" : "none",
-      boxShadow: isGold ? `${metal.glowGoldTight}, inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 2px rgba(60,40,0,0.3)` : "none",
+      border: isGold ? "1.5px solid transparent" : i ? `1.5px solid ${t}` : "none",
+      boxShadow: isGold ? `${metal.glowGoldTight}, inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 2px rgba(60,40,0,0.3)` : "none",
       borderRadius: 11,
-      padding: o ? "7px 12px" : "11px 16px",
+      padding: o ? "7px 12px" : "17px 16px",
       fontWeight: 700,
       fontSize: o ? 11 : 13,
       cursor: a ? "not-allowed" : "pointer",
@@ -137,23 +141,7 @@ export const PrimaryButton = ({
       overflow: "hidden",
       opacity: a ? 0.5 : 1,
       ...n
-    }}>{isGold && <svg viewBox={"0 0 100 100"} style={{
-      position: "absolute",
-      width: 15,
-      height: 15,
-      left: 10,
-      top: 4,
-      opacity: 0.8,
-      pointerEvents: "none"
-    }}>{<path d={glintPath} fill={"#FFFBEF"} />}</svg>}{isGold && <svg viewBox={"0 0 100 100"} style={{
-      position: "absolute",
-      width: 10,
-      height: 10,
-      right: 14,
-      bottom: 6,
-      opacity: 0.55,
-      pointerEvents: "none"
-    }}>{<path d={glintPath} fill={"#FFFBEF"} />}</svg>}{l}</button>;
+    }}>{l}</button>;
   };
 
 export const Card = ({
