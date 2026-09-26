@@ -1,7 +1,7 @@
 import React from 'react';
 import { addDays, dayAt, getToday, getWeekAndDay, isRoutineMode, makeRoutinePhase, parseDateKey, phaseForWeek, phaseKey, resolveCardio, startOfWeek, toDateKey } from '../utils.js';
-import { CATEGORY_COLORS, theme, metal, gradientText, topLitGoldBorder, gradientBorder } from '../theme.js';
-import { Card, Icon, Label, PrimaryButton } from '../components/ui.jsx';
+import { CATEGORY_COLORS, theme } from '../theme.js';
+import { Badge, Card, Label, PrimaryButton } from '../components/ui.jsx';
 
 export function HomeScreen({
   settings: e,
@@ -34,37 +34,31 @@ export function HomeScreen({
     }, (d, r) => toDateKey(addDays(T, r))).filter(d => l[d]).length;
   return <div style={{
       padding: "16px 16px 0",
-      fontFamily: "'Inter',system-ui,sans-serif"
+      fontFamily: "system-ui,sans-serif"
     }}>{<div style={{
       display: "flex",
       justifyContent: "space-between",
       alignItems: "flex-start",
       marginBottom: 16
     }}>{<div>{<div style={{
-      fontSize: 18,
-      fontFamily: "'Roboto Condensed',sans-serif",
-      fontWeight: 400,
-      letterSpacing: "0.1em",
+      fontSize: 11,
+      color: theme.muted,
+      fontFamily: "monospace",
+      letterSpacing: "0.12em",
       textTransform: "uppercase",
-      marginBottom: 6,
-      ...gradientText(metal.eyebrowTan)
-    }}>{"Asteria"}</div>}{<div style={{
-      fontSize: 40,
-      fontWeight: 700,
-      fontFamily: "'Bebas Neue',system-ui,sans-serif",
-      letterSpacing: "0.05em",
-      textTransform: "uppercase",
-      lineHeight: 1.05,
-      textShadow: "0 -1px 0 #EEF2F3, 0 1px 1px rgba(0,0,0,0.6), 0 3px 6px rgba(0,0,0,0.35)",
-      ...gradientText(metal.greetingSilver)
+      marginBottom: 4
+    }}>{"ForgeFit"}</div>}{<div style={{
+      fontSize: 22,
+      fontWeight: 800,
+      color: theme.text
     }}>{(() => {
     let d = (/* @__PURE__ */new Date()).getHours();
     return d < 12 ? "Good morning" : d < 17 ? "Good afternoon" : "Good evening";
   })()}{", Shane."}</div>}</div>}</div>}{m ? <div style={{
-      backgroundImage: metal.carbonGradient,
-      border: `1px solid ${theme.border}`,
-      borderRadius: 18,
-      padding: "16px 18px",
+      background: "rgba(16,185,129,0.08)",
+      border: "1px solid rgba(16,185,129,0.2)",
+      borderRadius: 12,
+      padding: "10px 14px",
       marginBottom: 12
     }}>{<div style={{
       display: "flex",
@@ -87,53 +81,41 @@ export function HomeScreen({
       color: theme.sub,
       lineHeight: 1.5
     }}>{"Running your Week 12 routine on repeat. Edit it anytime from the Program tab."}</div>}</div> : <div style={{
-      ...topLitGoldBorder(metal.carbonGradient),
-      borderRadius: 18,
-      padding: "16px 18px",
+      background: "rgba(245,158,11,0.08)",
+      border: "1px solid rgba(245,158,11,0.2)",
+      borderRadius: 12,
+      padding: "10px 14px",
       marginBottom: 12
     }}>{<div style={{
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "baseline",
-      marginBottom: 10
+      alignItems: "center",
+      marginBottom: 6
     }}>{<span style={{
-      fontSize: 17,
-      fontWeight: 700,
-      fontFamily: "'Bebas Neue',system-ui,sans-serif",
-      letterSpacing: "0.06em",
-      textTransform: "uppercase",
-      textShadow: metal.bevelGold,
-      ...gradientText(metal.eyebrowGold)
-    }}>{"WK "}{c}</span>}{<span style={{
-      fontSize: 14,
-      fontWeight: 700,
+      fontSize: 10,
       fontFamily: "monospace",
-      textShadow: metal.bevelGold,
-      ...gradientText(metal.goldText)
-    }}>{c}{" / 12"}</span>}</div>}{<div style={{
-      ...gradientBorder(`linear-gradient(${theme.black}, ${theme.black})`, metal.borderBarVertical),
-      height: 6,
-      borderRadius: 4,
+      color: theme.phase,
+      textTransform: "uppercase",
+      letterSpacing: "0.12em"
+    }}>{y.label}{" — Wk "}{c}</span>}{<span style={{
+      fontSize: 11,
+      fontWeight: 700,
+      color: theme.phase
+    }}>{c}{"/12"}</span>}</div>}{<div style={{
+      height: 3,
+      background: theme.border,
+      borderRadius: 2,
       overflow: "hidden"
     }}>{<div style={{
-      position: "relative",
       height: "100%",
-      background: metal.goldBar,
-      borderRadius: 4,
+      background: theme.phase,
+      borderRadius: 2,
       width: `${(c - 1) / 12 * 100}%`,
-      transition: "width 0.4s",
-      overflow: "hidden"
-    }}>{<div style={{
-      position: "absolute",
-      top: "-60%",
-      left: "55%",
-      width: "34%",
-      height: "220%",
-      background: metal.barHotspot
-    }} />}</div>}</div>}{<div style={{
+      transition: "width 0.4s"
+    }} />}</div>}{<div style={{
       fontSize: 11,
       color: theme.sub,
-      marginTop: 9,
+      marginTop: 6,
       lineHeight: 1.5
     }}>{y.weekFocus?.[(c - 1) % 4] || y.desc || ""}</div>}</div>}{<div style={{
       display: "grid",
@@ -143,85 +125,50 @@ export function HomeScreen({
     }}>{[{
     val: h,
     label: "Streak",
-    color: theme.gold,
-    icon: "fire",
-    grad: ["#FFDD82", "#8F6519"]
+    color: theme.push
   }, {
     val: `${M}/${n.filter(Rd => resolveCardio(Rd, phaseKey(y))).length}`,
     label: "Cardio",
-    color: theme.ice,
-    icon: "heart-pulse",
-    grad: ["#FFFFFF", "#7FB8DE"]
+    color: theme.pelo
   }, {
     val: E,
     label: "PRs",
-    color: theme.text,
-    icon: "kettlebell",
-    grad: ["#FFFFFF", "#9AA3B5"]
+    color: theme.legs
   }].map(d => <div key={d.label} style={{
-      ...gradientBorder(metal.steelGradient, metal.borderMetalNeutral),
-      borderRadius: 14,
-      padding: "28px 10px 24px",
-      minHeight: 148,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      textAlign: "center"
-    }}>{<Icon name={d.icon} size={32} color={d.color} strokeWidth={1.5} gradient={d.grad} />}{<div style={{
-      fontSize: 23,
-      fontWeight: 700,
-      fontFamily: "'Bebas Neue',system-ui,sans-serif",
-      lineHeight: 1,
-      marginTop: 12,
-      textShadow: d.color === theme.gold ? "0 1px 2px rgba(0,0,0,0.4), 0 0 10px rgba(212,153,61,0.35)" : "0 1px 2px rgba(0,0,0,0.4)",
-      ...gradientText(d.color === theme.gold ? metal.goldText : d.color === theme.ice ? `linear-gradient(180deg, #FFFFFF, #BFE0F5)` : metal.silverText)
+      background: theme.steel,
+      borderRadius: 10,
+      padding: "10px 8px",
+      textAlign: "center",
+      border: `1px solid ${theme.border}`
+    }}>{<div style={{
+      fontSize: 20,
+      fontWeight: 800,
+      fontFamily: "monospace",
+      color: d.color,
+      lineHeight: 1
     }}>{d.val}</div>}{<div style={{
       fontSize: 9,
       color: theme.muted,
-      marginTop: 6,
+      marginTop: 3,
       textTransform: "uppercase",
       letterSpacing: "0.1em"
     }}>{d.label}</div>}</div>)}</div>}{b ? <Card style={{
-      ...topLitGoldBorder(metal.carbonGradient)
+      border: `1px solid ${b.color || CATEGORY_COLORS[b.type]}44`
     }}>{<div style={{
       display: "flex",
       justifyContent: "space-between",
       alignItems: "flex-start",
-      marginBottom: 12
+      marginBottom: 8
     }}>{<div>{<Label style={{
-      marginBottom: 4,
-      fontFamily: "monospace",
-      ...gradientText(metal.eyebrowGold)
+      marginBottom: 2
     }}>{"Today"}</Label>}{<div style={{
-      fontSize: 24,
+      fontSize: 17,
       fontWeight: 700,
-      fontFamily: "'Bebas Neue',system-ui,sans-serif",
-      letterSpacing: "0.01em",
-      textTransform: "uppercase",
-      textShadow: metal.bevelSilver,
-      ...gradientText(metal.silverText)
+      color: theme.text
     }}>{b.label}</div>}{<div style={{
-      fontSize: 11,
-      color: theme.sub,
-      marginTop: 3,
-      textTransform: "uppercase",
-      letterSpacing: "0.06em"
-    }}>{b.exercises.length}{" exercises"}</div>}</div>}{<span style={{
-      display: "inline-block",
-      fontSize: 10,
-      fontWeight: 700,
-      fontFamily: "monospace",
-      letterSpacing: "0.06em",
-      color: theme.gold,
-      backgroundColor: "transparent",
-      backgroundImage: `linear-gradient(${theme.carbon}, ${theme.carbon}), ${metal.borderDiagonalGold}`,
-      backgroundOrigin: "padding-box, border-box",
-      backgroundClip: "padding-box, border-box",
-      border: "1px solid transparent",
-      borderRadius: 8,
-      padding: "4px 12px"
-    }}>{b.type.toUpperCase()}</span>}</div>}{<PrimaryButton onClick={() => i("sessions")} color={theme.gold} outline={!!t[p]}>{t[p] ? "View Today's Session" : "Begin " + b.label}</PrimaryButton>}</Card> : <Card>{<div style={{
+      fontSize: 12,
+      color: theme.sub
+    }}>{b.exercises.length}{" exercises"}</div>}</div>}{<Badge color={b.color || CATEGORY_COLORS[b.type]}>{b.type.toUpperCase()}</Badge>}</div>}{<PrimaryButton onClick={() => i("sessions")} color={b.color || CATEGORY_COLORS[b.type]} outline={!!t[p]}>{t[p] ? "View Today's Session" : "Begin " + b.label}</PrimaryButton>}</Card> : <Card>{<div style={{
       fontSize: 16,
       fontWeight: 700,
       color: theme.text,

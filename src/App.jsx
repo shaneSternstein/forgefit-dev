@@ -1,7 +1,7 @@
 import React from 'react';
 import { DEFAULT_PROGRAM_DAYS, PHASE_SUMMARIES } from './constants.js';
 import { loadFromStorage, saveToStorage } from './utils.js';
-import { theme, metal } from './theme.js';
+import { theme } from './theme.js';
 import { Onboarding } from './components/Onboarding.jsx';
 import { Icon } from './components/ui.jsx';
 import { HomeScreen } from './screens/HomeScreen.jsx';
@@ -137,17 +137,22 @@ export function App() {
       left: 0,
       right: 0,
       zIndex: 40,
-      background: "rgba(9,11,15,0.95)",
+      background: "rgba(13,13,15,0.95)",
+      borderBottom: `1px solid ${theme.border}`,
       backdropFilter: "blur(8px)",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      padding: "14px 16px",
-      height: 64
-    }}>{<img src={"asteria-logo-horizontal.png"} alt={"Asteria Fitness"} style={{
-      height: 30,
-      display: "block"
-    }} />}{<div style={{
+      padding: "10px 16px",
+      height: 56
+    }}>{<div style={{
+      fontSize: 11,
+      fontFamily: "monospace",
+      letterSpacing: "0.18em",
+      color: theme.push,
+      textTransform: "uppercase",
+      fontWeight: 700
+    }}>{"ForgeFit"}</div>}{<div style={{
       display: "flex",
       alignItems: "center",
       gap: 8
@@ -166,32 +171,27 @@ export function App() {
       fontWeight: 800,
       color: theme.pelo
     }}>{String(Math.floor(O / 60)).padStart(2, "0")}{":"}{String(O % 60).padStart(2, "0")}</span>}</button>}{<button onClick={() => T(true)} style={{
-      backgroundImage: `radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12), transparent 45%), linear-gradient(${theme.steel}, ${theme.steel}), ${metal.borderDiagonalGold}`,
-      backgroundOrigin: "padding-box, padding-box, border-box",
-      backgroundClip: "padding-box, padding-box, border-box",
-      border: "1.5px solid transparent",
+      background: theme.steel,
+      border: `1px solid ${theme.border}`,
       borderRadius: 10,
-      width: 44,
-      height: 44,
-      padding: 0,
+      padding: 7,
       cursor: "pointer",
       display: "flex",
       alignItems: "center",
       justifyContent: "center"
-    }}>{<Icon name={"gear"} size={25} color={theme.gold} gradient={["#F7EBC8", "#A97A24"]} />}</button>}</div>}</div>}{<div style={{
+    }}>{<Icon name={"gear"} size={18} color={theme.sub} />}</button>}</div>}</div>}{<div style={{
       flex: 1,
       overflowY: "auto",
       paddingBottom: 80,
-      paddingTop: 64,
-      background: `${metal.ambientGlow}, ${theme.black}`
+      paddingTop: 56
     }}>{p === "home" && <HomeScreen settings={l} sessions={i} rides={o} days={f} navigate={h} phases={Pp} />}{p === "program" && <ProgramScreen settings={l} sessions={i} rides={o} days={f} overrides={y} onSaveDays={j} onSaveOverrides={H} phases={Pp} onSavePhases={Kp} onSaveSettings={q} />}{p === "sessions" && <SessionsScreen settings={l} sessions={i} rides={o} days={f} overrides={y} sessionDraft={M} setSessionDraft={d} onSaveSession={S} onSaveRide={D} timerRunning={r} setTimerRunning={v} timerPaused={g} setTimerPaused={_} timerVal={O} setTimerVal={z} timerRef={A} phases={Pp} exerciseNotes={XN} onSaveExerciseNotes={XNSet} bumpTimer={setTg} />}{p === "progress" && <ProgressScreen settings={l} sessions={i} rides={o} days={f} overrides={y} phases={Pp} />}</div>}{<div style={{
       position: "fixed",
       bottom: 0,
       left: 0,
       right: 0,
       zIndex: 40,
-      background: theme.black,
-      borderTop: `1px solid rgba(230,230,235,0.05)`,
+      background: theme.carbon,
+      borderTop: `1px solid ${theme.border}`,
       display: "flex",
       paddingBottom: "env(safe-area-inset-bottom,8px)"
     }}>{ze.map(Q => {
@@ -207,16 +207,16 @@ export function App() {
         alignItems: "center",
         gap: 3,
         position: "relative"
-      }}>{<Icon name={Q.icon} size={25} color={Me ? theme.gold : theme.muted} strokeWidth={Me ? 2 : 1.5} glow={Me} gradient={Me ? ["#F7EBC8", "#A97A24", "0", "1"] : null} />}{<span style={{
+      }}>{<Icon name={Q.icon} size={22} color={Me ? theme.push : theme.muted} strokeWidth={Me ? 2 : 1.5} />}{<span style={{
         fontSize: 9,
         fontFamily: "monospace",
         letterSpacing: "0.06em",
         textTransform: "uppercase",
-        color: Me ? theme.gold : theme.muted
+        color: Me ? theme.push : theme.muted
       }}>{Q.label}</span>}{<div style={{
         width: Me ? 20 : 0,
         height: 2,
-        background: theme.gold,
+        background: theme.push,
         borderRadius: 1,
         transition: "width 0.2s"
       }} />}</button>;
