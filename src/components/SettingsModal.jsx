@@ -8,7 +8,9 @@ export function SettingsModal({
   onSave: t,
   onClose: l
 }) {
-  let [a, o] = (0, React.useState)(e.unit || "lbs"),
+  let [nm, setNm] = (0, React.useState)(e.name || ""),
+    [bw, setBw] = (0, React.useState)(e.bodyWeight ? String(e.bodyWeight) : ""),
+    [a, o] = (0, React.useState)(e.unit || "lbs"),
     [c, f] = (0, React.useState)(e.setRestTime || 60),
     [m, y] = (0, React.useState)(e.exRestTime || 120),
     [b, p] = (0, React.useState)(false),
@@ -17,6 +19,8 @@ export function SettingsModal({
     h = async () => {
       let d = {
         ...e,
+        name: nm.trim(),
+        bodyWeight: parseFloat(bw) > 0 ? parseFloat(bw) : undefined,
         unit: a,
         setRestTime: c,
         exRestTime: m,
@@ -58,7 +62,17 @@ export function SettingsModal({
       color: theme.muted,
       cursor: "pointer",
       padding: 4
-    }}>{<Icon name={"x"} size={20} color={theme.muted} />}</button>}</div>}{<Label>{"Weight Unit"}</Label>}{<div style={{
+    }}>{<Icon name={"x"} size={20} color={theme.muted} />}</button>}</div>}{<Label>{"Name"}</Label>}{<input value={nm} onChange={C => setNm(C.target.value)} placeholder={"Your name"} style={{
+      width: "100%",
+      background: theme.steel,
+      border: `1px solid ${theme.border}`,
+      borderRadius: 10,
+      padding: "12px 14px",
+      fontSize: 15,
+      color: theme.text,
+      marginBottom: 20,
+      boxSizing: "border-box"
+    }} />}{<Label>{"Weight Unit"}</Label>}{<div style={{
       display: "grid",
       gridTemplateColumns: "1fr 1fr",
       gap: 8,
@@ -73,7 +87,17 @@ export function SettingsModal({
       fontSize: 14,
       cursor: "pointer",
       fontFamily: "inherit"
-    }}>{T}</button>)}</div>}{<DurationInput value={c} onChange={f} label={"Rest Between Sets"} />}{<DurationInput value={m} onChange={y} label={"Rest Between Exercises"} />}{<Label>{"Auto-Start Rest Timer"}</Label>}{<div style={{
+    }}>{T}</button>)}</div>}{<Label>{"Body Weight (optional)"}</Label>}{<input type={"number"} inputMode={"decimal"} value={bw} onChange={C => setBw(C.target.value)} placeholder={"For bodyweight exercises"} style={{
+      width: "100%",
+      background: theme.steel,
+      border: `1px solid ${theme.border}`,
+      borderRadius: 10,
+      padding: "12px 14px",
+      fontSize: 15,
+      color: theme.text,
+      marginBottom: 20,
+      boxSizing: "border-box", fontFamily: "monospace"
+    }} />}{<DurationInput value={c} onChange={f} label={"Rest Between Sets"} />}{<DurationInput value={m} onChange={y} label={"Rest Between Exercises"} />}{<Label>{"Auto-Start Rest Timer"}</Label>}{<div style={{
       display: "grid",
       gridTemplateColumns: "1fr 1fr",
       gap: 8,

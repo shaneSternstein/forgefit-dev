@@ -78,7 +78,7 @@ export function ProgressScreen({
       }}>{"Log a session to see exercise history here."}</div>}</Card>}</div>;
   if (f === "weeks") return <div style={{
       fontFamily: "system-ui,sans-serif"
-    }}>{<V />}{<div style={{
+    }}>{V()}{<div style={{
       padding: "0 16px"
     }}>{<StatsCard sessions={t} rides={l} settings={e} />}</div>}</div>;
   if (f === "day" && y) {

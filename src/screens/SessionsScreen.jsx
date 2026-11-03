@@ -77,7 +77,7 @@ export function SessionsScreen({
           length: $.sets
         }, (ne, he) => ({
           weight: w[he]?.weight || "",
-          reps: "",
+          reps: /farmer_carry$/.test($.id) ? w[he]?.reps || String(parseInt($.reps) || "") : "",
           done: false
         }));
       }
@@ -167,11 +167,12 @@ export function SessionsScreen({
         };
       });
     },
+    bwReps = C => S?.exercises?.find(x => x.id === C)?.equip === "Bodyweight" && !/plank$/.test(C),
     oi = (C, V) => {
       Vt || Ve($ => {
         let be = [...($.exSets?.[C] || [])],
           w = be[V];
-        if (!w?.weight && C !== "plank" && C !== "farmer_carry" || !w?.weight) return $;
+        if (!(w?.weight || bwReps(C) && w?.reps)) return $;
         be[V] = {
           ...w,
           done: true
@@ -313,7 +314,7 @@ export function SessionsScreen({
       fontSize: 10,
       color: theme.muted,
       fontFamily: "monospace"
-    }}>{D ? `Routine \xB7 Wk ${_}` : `Week ${_}`}{" · "}{S?.label || "Rest"}</div>}</div>}{<button onClick={() => {
+    }}>{D ? "Routine" : `Week ${_}`}{" · "}{S?.label || "Rest"}</div>}</div>}{<button onClick={() => {
       v(C => C + 1), Ut(null);
     }} style={{
       background: theme.steel,
@@ -493,9 +494,16 @@ export function SessionsScreen({
         transition: "border 0.15s",
         cursor: "pointer"
       }}>{(() => {
-      let w = toDateKey(addDays(g, -7)),
-        he = (n[w]?.exercises?.[C.id] || []).filter(Ke => Ke.done),
+      let he = [], Ct = 0;
+      {
+        const HIST_LOOKBACK_WEEKS = 26; // matches the weight auto-fill lookback
+        for (let wk = 1; wk <= HIST_LOOKBACK_WEEKS; wk++) {
+          let w = toDateKey(addDays(g, -7 * wk));
+          let candidate = (n[w]?.exercises?.[C.id] || []).filter(Ke => Ke.done);
+          if (candidate.length) { he = candidate; break; }
+        }
         Ct = he.length ? Math.max(...he.map(Ke => parseFloat(Ke.weight) || 0)) : 0;
+      }
       return <div style={{
           display: "flex",
           justifyContent: "space-between",
@@ -528,7 +536,7 @@ export function SessionsScreen({
           fontFamily: "monospace",
           textTransform: "uppercase",
           letterSpacing: "0.08em"
-        }}>{"Last wk:"}</span>}{he.slice(0, 4).map((Ke, ba) => <span key={ba} style={{
+        }}>{"Last:"}</span>}{he.slice(0, 4).map((Ke, ba) => <span key={ba} style={{
           fontSize: 9,
           fontFamily: "monospace",
           color: parseFloat(Ke.weight) >= Ct && ba === he.findIndex(ao => parseFloat(ao.weight) === Ct) ? theme.push : theme.sub,
@@ -540,8 +548,8 @@ export function SessionsScreen({
     })()}{$ && <>{(() => {
       let w = V[0]?.weight,
         pl2 = C.id === "plank",
-        fc = C.id === "farmer_carry",
-        ul = pl2 ? "secs" : fc ? "ft" : l.unit || "lbs";
+        fc = /farmer_carry$/.test(C.id),
+        ul = pl2 ? "secs" : l.unit || "lbs";
       return <button onClick={Ev => {
           Ev.stopPropagation(), w && no(C.id, w);
         }} disabled={!w} style={{
@@ -562,13 +570,13 @@ export function SessionsScreen({
         }}>{<Icon name={"copy"} size={12} color={w ? theme.pull : theme.muted} />}{w ? <>{"Apply "}{w}{ul}{" to all sets"}</> : "Apply to all sets"}</button>;
     })()}{(() => {
       let w = C.id === "plank",
-        ne = C.id === "farmer_carry";
+        ne = /farmer_carry$/.test(C.id);
       return <div style={{
           display: "grid",
           gridTemplateColumns: "26px 1fr 1fr 32px",
           gap: 4,
           marginBottom: 4
-        }}>{["SET", w ? "SECS" : ne ? "DIST" : "WEIGHT", w ? "SETS" : ne ? "FT" : "REPS", ""].map(Ke => <div key={Ke} style={{
+        }}>{["SET", w ? "SECS" : "WEIGHT", w ? "SETS" : ne ? "FT" : "REPS", ""].map(Ke => <div key={Ke} style={{
           fontSize: 8,
           fontFamily: "monospace",
           color: theme.muted,
@@ -577,11 +585,11 @@ export function SessionsScreen({
         }}>{Ke}</div>)}</div>;
     })()}{V.map((w, ne) => {
       let he = C.id === "plank",
-        Ct = C.id === "farmer_carry",
+        Ct = /farmer_carry$/.test(C.id),
         Ke = toDateKey(addDays(g, -7)),
         ba = n[Ke]?.exercises?.[C.id]?.[ne]?.weight || "",
-        ao = he ? "secs" : Ct ? "ft" : ba || "lbs",
-        I0 = he ? "done" : Ct ? "sets" : "reps";
+        ao = he ? "secs" : bwReps(C.id) ? "+" + (l.unit || "lbs") : ba || "lbs",
+        I0 = he ? "done" : Ct ? "ft" : "reps";
       return <div key={ne} style={{
           display: "grid",
           gridTemplateColumns: "26px 1fr 1fr 32px",
@@ -597,7 +605,7 @@ export function SessionsScreen({
         }}>{ne + 1}</div>}{<input type={"number"} inputMode={"decimal"} placeholder={ao} value={w.weight || ""} disabled={Vt || K} onChange={it => {
           it.stopPropagation(), va(C.id, ne, "weight", it.target.value);
         }} onBlur={() => {
-          (he ? w.weight : w.weight && w.reps) && oi(C.id, ne);
+          (he ? w.weight : (w.weight || bwReps(C.id)) && w.reps) && oi(C.id, ne);
         }} onClick={it => it.stopPropagation()} style={{
           background: w.done ? "rgba(16,185,129,0.1)" : "rgba(255,255,255,0.06)",
           border: `1px solid ${w.done ? theme.legs + "55" : w.weight ? theme.pull + "55" : theme.border}`,
@@ -632,7 +640,7 @@ export function SessionsScreen({
       })() : <input type={"number"} inputMode={"numeric"} placeholder={I0} value={w.reps || ""} disabled={Vt || K} onChange={it => {
           it.stopPropagation(), va(C.id, ne, "reps", it.target.value);
         }} onBlur={() => {
-          w.weight && w.reps && oi(C.id, ne);
+          (w.weight || bwReps(C.id)) && w.reps && oi(C.id, ne);
         }} onClick={it => it.stopPropagation()} style={{
           background: w.done ? "rgba(16,185,129,0.1)" : "rgba(255,255,255,0.06)",
           border: `1px solid ${w.done ? theme.legs + "55" : w.reps ? theme.push + "55" : theme.border}`,

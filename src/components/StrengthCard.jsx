@@ -1,5 +1,5 @@
 import React from 'react';
-import { ffStrengthBuckets, ffStrengthStats } from '../stats.js';
+import { ffStrengthBuckets, ffStrengthScores, ffStrengthStats } from '../stats.js';
 import { formatShortDate } from '../utils.js';
 import { Card, Icon, Label } from './ui.jsx';
 import { theme } from '../theme.js';
@@ -13,14 +13,20 @@ export function StrengthCard({
 }) {
   let [period, setPeriod] = (0, React.useState)("3M"),
     [off, setOff] = (0, React.useState)(0),
-    unit = e.unit || "lbs",
+    [sel, setSel] = (0, React.useState)(null),
+    unit = "pts",
+    needsBW = ffStrengthScores(t, e).needsBodyWeight,
     stats = ffStrengthStats(period, t, e, off),
     buckets = ffStrengthBuckets(period, t, e, off, n, ov, ph),
     maxV = Math.max(...buckets.map(b => b.total), 1e-3),
     rangeLbl = `${formatShortDate(stats.start)} \u2013 ${formatShortDate(stats.end)}, ${stats.end.getFullYear()}`,
     canNav = period !== "All",
     atCurrent = off >= 0,
-    showStatus = period === "1W";
+    showStatus = period === "1W",
+    selKey = period + ":" + off,
+    selIdx = sel && sel.k === selKey ? sel.i : null,
+    picked = selIdx !== null ? buckets[selIdx] : null,
+    statusText = picked && picked.total === 0 && showStatus ? picked.status === "rest" ? "Rest day" : picked.status === "missed" ? "Missed" : "" : "";
   return <Card style={{
       marginBottom: 14,
       padding: "14px 14px 16px"
@@ -31,7 +37,7 @@ export function StrengthCard({
       marginBottom: 2
     }}>{<Label style={{
       marginBottom: 0
-    }}>{"Strength Volume"}</Label>}</div>}{<div style={{
+    }}>{"Strength Output"}</Label>}</div>}{<div style={{
       display: "flex",
       alignItems: "center",
       justifyContent: canNav ? "center" : "flex-start",
@@ -89,7 +95,24 @@ export function StrengthCard({
       fontSize: 10,
       color: theme.muted,
       marginTop: 2
-    }}>{lbl}</div>}</div>)}</div>}{<svg viewBox={"0 0 300 90"} preserveAspectRatio={"none"} style={{
+    }}>{lbl}</div>}</div>)}</div>}{<div style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "baseline",
+      minHeight: 20,
+      marginBottom: 6
+    }}>{picked ? <><span style={{
+      fontSize: 11,
+      color: theme.sub
+    }}>{picked.title}</span><span style={{
+      fontFamily: "monospace",
+      fontSize: 13,
+      fontWeight: 700,
+      color: picked.total > 0 ? theme.push : theme.muted
+    }}>{Math.round(picked.total).toLocaleString()}{" "}{unit}{statusText ? " · " + statusText : ""}</span></> : <span style={{
+      fontSize: 10,
+      color: theme.muted
+    }}>{"Tap a bar to see its total"}</span>}</div>}{<svg viewBox={"0 0 300 90"} preserveAspectRatio={"none"} style={{
       width: "100%",
       height: 90,
       display: "block"
@@ -102,7 +125,14 @@ export function StrengthCard({
       bh = hasVolume ? b.total / maxV * 72 : showStatus && b.status !== "future" && b.status !== "before" ? 3 : 0,
       by = 82 - bh,
       fill = hasVolume ? theme.push : b.status === "missed" ? theme.muted : theme.border;
-    return <rect key={i} x={bx} y={by} width={bw} height={bh} rx={2} fill={fill} opacity={hasVolume ? 1 : b.status === "missed" ? 0.6 : 0.4} />;
+    let baseOp = hasVolume ? 1 : b.status === "missed" ? 0.6 : 0.4,
+      dim = selIdx !== null && selIdx !== i;
+    return <g key={i} onClick={() => setSel(selIdx === i ? null : {
+      k: selKey,
+      i
+    })} style={{
+      cursor: "pointer"
+    }}>{<rect x={10 + i * slot} y={0} width={slot} height={90} fill="transparent" />}{<rect x={bx} y={by} width={bw} height={bh} rx={2} fill={fill} opacity={dim ? baseOp * 0.4 : baseOp} stroke={selIdx === i ? theme.text : "none"} strokeWidth={selIdx === i ? 1 : 0} vectorEffect={"non-scaling-stroke"} />}</g>;
   })}</svg>}{<div style={{
       display: "flex",
       marginBottom: 14
@@ -127,5 +157,10 @@ export function StrengthCard({
       borderRadius: 999,
       background: p === period ? theme.text : "transparent",
       color: p === period ? theme.black : theme.muted
-    }}>{p}</button>)}</div>}</Card>;
+    }}>{p}</button>)}</div>}{<div style={{
+      fontSize: 10,
+      color: theme.muted,
+      marginTop: 10,
+      lineHeight: 1.5
+    }}>{"Points are relative to your own best on each exercise, so a heavier set scores more per rep."}{needsBW ? " Add your body weight in Settings to count bodyweight exercises." : ""}</div>}</Card>;
 }
