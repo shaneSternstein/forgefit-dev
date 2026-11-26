@@ -1,6 +1,9 @@
 import React from 'react';
 import { dayAt, formatWeekdayShort, getToday, getWeekAndDay, parseDateKey, phaseForWeek, phaseKey, resolveExercises } from '../utils.js';
 import { ffExMeta, ffTrainedExercises } from '../stats.js';
+import { ffBalance } from '../balance.js';
+import { BalanceCard } from '../components/BalanceCard.jsx';
+import { BalanceDrill } from '../components/BalanceDrill.jsx';
 import { EXERCISE_LIBRARY, MUSCLE_GROUPS } from '../constants.js';
 import { Badge, Card, Icon, Label } from '../components/ui.jsx';
 import { CATEGORY_COLORS, theme } from '../theme.js';
@@ -28,6 +31,10 @@ export function ProgressScreen({
     [CMo, SCMo] = (0, React.useState)(0),
     [MG, setMG] = (0, React.useState)(null),
     [EO, SEO] = (0, React.useState)("day"),
+    [BP, setBP] = (0, React.useState)("1M"),
+    [BO, setBO] = (0, React.useState)(0),
+    [BG, setBG] = (0, React.useState)(null),
+    bal = (0, React.useMemo)(() => ffBalance(BP, BO, e, n, ov, ph, t), [BP, BO, e, n, ov, ph, t]),
     trainedAll = ffTrainedExercises(n, t),
     mgList = [...MUSCLE_GROUPS.filter(D => D !== "All"), "Other"].map(nm2 => ({
       name: nm2,
@@ -43,7 +50,7 @@ export function ProgressScreen({
         fontWeight: 800,
         color: theme.text,
         marginBottom: 14
-      }}>{"Your Gains"}</div>}{<CalCard settings={e} days={n} overrides={ov} sessions={t} rides={l} phases={ph} monthOffset={CMo} setMonthOffset={SCMo} />}{<StrengthCard settings={e} sessions={t} days={n} overrides={ov} phases={ph} />}{<CardioCard settings={e} rides={l} />}{<Card style={{
+      }}>{"Your Gains"}</div>}{<CalCard settings={e} days={n} overrides={ov} sessions={t} rides={l} phases={ph} monthOffset={CMo} setMonthOffset={SCMo} />}{<StrengthCard settings={e} sessions={t} days={n} overrides={ov} phases={ph} />}{<BalanceCard data={bal} period={BP} setPeriod={p2 => { setBP(p2); setBO(0); }} off={BO} setOff={setBO} onOpen={gn => { setBG(gn); m("balance"); }} />}{<CardioCard settings={e} rides={l} />}{<Card style={{
         marginBottom: 14,
         padding: "14px 14px 6px"
       }}>{<Label style={{
@@ -81,6 +88,7 @@ export function ProgressScreen({
     }}>{V()}{<div style={{
       padding: "0 16px"
     }}>{<StatsCard sessions={t} rides={l} settings={e} />}</div>}</div>;
+  if (f === "balance" && BG) return <BalanceDrill data={bal} group={BG} onBack={() => m("weeks")} />;
   if (f === "day" && y) {
     let g = t[y],
       _ = parseDateKey(y),
