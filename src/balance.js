@@ -63,8 +63,9 @@ export function ffPeriodRange(period, off, e) {
 
 function addTo(acc, w, sets) { for (const c in w) acc[c] = (acc[c] || 0) + w[c] * sets; }
 
-export function ffBalance(period, off, settings, days, overrides, phases, sessions) {
-  const { start, end } = ffPeriodRange(period, off, settings), sk = toDateKey(start), ek = toDateKey(end), pk0 = settings.startDate, tk = toDateKey(getToday());
+// range (optional {start,end}) overrides the period, used by the Program editor to plan over the whole program.
+export function ffBalance(period, off, settings, days, overrides, phases, sessions, range) {
+  const { start, end } = range || ffPeriodRange(period, off, settings), sk = toDateKey(start), ek = toDateKey(end), pk0 = settings.startDate, tk = toDateKey(getToday());
   const index = exerciseIndex(days, overrides), progStart = parseDateKey(settings.startDate);
   const plan = {}, planToDate = {}, act = {}, exPlan = {}, exAct = {};
   let unPlan = 0, unAct = 0, approxPlan = 0, approxAct = 0;
@@ -110,4 +111,21 @@ export function ffBalance(period, off, settings, days, overrides, phases, sessio
   });
   return { start, end, groups, planTot, actTot, completion: planToDateTot ? Math.min(actTot / planToDateTot * 100, 999) : null,
     unassigned: { plan: unPlan, actual: unAct }, approx: { plan: approxPlan, actual: approxAct }, empty: !planTot && !actTot };
+}
+
+// Muscle split of one day's session: planned vs done weighted sets per group.
+// exercises: [{id,name,sets}], setsDone: {exId: number of done sets}. Unmapped exercises are counted in `unmapped`.
+export function ffDayMuscles(exercises, setsDone, days, overrides) {
+  const index = exerciseIndex(days, overrides), plan = {}, done = {}; let unmapped = 0, approx = 0;
+  (exercises || []).forEach(x => {
+    const sets = Number(x.sets) || 0, d = (setsDone && setsDone[x.id]) || 0, prof = profileFor(x.id, index, x.name);
+    if (!prof) { if (sets || d) unmapped++; return; }
+    prof.approx && (sets || d) && approx++;
+    addTo(plan, prof.w, sets); addTo(done, prof.w, d);
+  });
+  const groups = MUSCLE_TIERS.map(([name, cols]) => ({ name, planned: cols.reduce((a, c) => a + (plan[c] || 0), 0), done: cols.reduce((a, c) => a + (done[c] || 0), 0) })).filter(g => g.planned > 0 || g.done > 0);
+  const tot = groups.reduce((a, g) => a + g.planned, 0);
+  groups.forEach(g => { g.share = tot ? g.planned / tot * 100 : 0; });
+  groups.sort((a, b) => b.planned - a.planned);
+  return { groups, unmapped, approx };
 }

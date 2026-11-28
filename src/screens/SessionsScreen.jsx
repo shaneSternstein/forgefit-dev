@@ -3,6 +3,7 @@ import { activityLabel, addDays, dayAt, formatWeekdayLong, getToday, getWeekAndD
 import { CATEGORY_COLORS, theme } from '../theme.js';
 import { Badge, Card, Divider, Icon, Label, PrimaryButton } from '../components/ui.jsx';
 import { CARDIO_ACTIVITIES } from '../constants.js';
+import { MusclesToday } from '../components/MusclesToday.jsx';
 
 export function SessionsScreen({
   days: e,
@@ -480,7 +481,7 @@ export function SessionsScreen({
       marginBottom: 0
     }}>{"Strength · "}{S.label}</Label>}{<Badge color={S.color || CATEGORY_COLORS[S.type]} style={{
       marginLeft: "auto"
-    }}>{R0}{"/"}{S.exercises.length}</Badge>}</div>}{S.exercises.map(C => {
+    }}>{R0}{"/"}{S.exercises.length}</Badge>}</div>}{<MusclesToday exercises={S.exercises} exSets={Bt} days={e} overrides={t} label={S.label} />}{S.exercises.map(C => {
     let V = Bt[C.id] || [],
       $ = ma === C.id,
       be = V.length > 0 && V.every(w => w.done);

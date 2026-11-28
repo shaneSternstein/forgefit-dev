@@ -1,4 +1,7 @@
-const esbuild = require('/home/claude/.npm-global/lib/node_modules/tsx/node_modules/esbuild/lib/main.js');
+let esbuild;
+try { esbuild = require('esbuild'); } catch (e) {
+  esbuild = require('/home/claude/.npm-global/lib/node_modules/tsx/node_modules/esbuild/lib/main.js');
+}
 const fs = require('fs');
 const path = require('path');
 

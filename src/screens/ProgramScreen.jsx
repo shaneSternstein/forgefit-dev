@@ -40,8 +40,11 @@ export function ProgramScreen({
       };
       await saveToStorage("settings:user", d), os(d), await saveToStorage("program:overrides", {}), o({}), setAm(null);
     };
-  return h ? <ProgramEditor days={n} overrides={i} sessions={t} settings={e} currentWeek={m} routine={y} phases={ph} onSave={(T, M, Pz) => {
-      a(T), o(M), Pz && op(Pz);
+  return h ? <ProgramEditor days={n} overrides={i} sessions={t} settings={e} currentWeek={m} routine={y} phases={ph} onSave={(T, M, Pz, Fz) => {
+      a(T), o(M), Pz && op(Pz), Fz && JSON.stringify(Fz) !== JSON.stringify(e.focus) && os({
+        ...e,
+        focus: Fz
+      });
     }} onClose={() => E(false)} /> : <div style={{
       padding: "16px 16px 0",
       fontFamily: "system-ui,sans-serif"

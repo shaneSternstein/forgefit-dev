@@ -7,6 +7,8 @@ import { ExercisePicker } from '../components/ExercisePicker.jsx';
 import { ExerciseEditorModal } from '../components/ExerciseEditorModal.jsx';
 import { DayEditorModal } from '../components/DayEditorModal.jsx';
 import { WeekDayPickerModal } from '../components/WeekDayPickerModal.jsx';
+import { FocusView } from '../components/FocusView.jsx';
+import { normalizeFocus } from '../focus.js';
 
 export function ProgramEditor({
   days: e,
@@ -32,6 +34,7 @@ export function ProgramEditor({
     [r, v] = (0, React.useState)(null),
     [g, _] = (0, React.useState)(/* @__PURE__ */new Set([i])),
     [O, z] = (0, React.useState)("template"),
+    [fz, setFz] = (0, React.useState)(() => normalizeFocus(n.focus)),
     [A, S] = (0, React.useState)(null),
     [Ow, Aw] = (0, React.useState)(null),
     [Dc, Sc] = (0, React.useState)(null),
@@ -290,7 +293,7 @@ export function ProgramEditor({
           };
         }
       }
-      o(f, Ov, lp), c();
+      o(f, Ov, lp, fz), c();
     },
     Ut = j,
     pa = i,
@@ -451,7 +454,7 @@ export function ProgramEditor({
       fontSize: 11,
       cursor: "pointer",
       fontFamily: "inherit"
-    }}>{"+ Add Phase"}</button>}</div>}</div>}{!a && <div style={{
+    }}>{"+ Add Phase"}</button>}</div>}</div>}{<div style={{
       background: theme.carbon,
       borderBottom: `1px solid ${theme.border}`,
       padding: "8px 16px",
@@ -462,7 +465,7 @@ export function ProgramEditor({
       borderRadius: 10,
       padding: 3,
       border: `1px solid ${theme.border}`
-    }}>{[["template", "Template (all weeks)"], ["weeks", "Week overrides"]].map(([B, U]) => <button key={B} onClick={() => z(B)} style={{
+    }}>{(a ? [["template", "Routine"], ["focus", "Focus"]] : [["template", "Template"], ["weeks", "Week overrides"], ["focus", "Focus"]]).map(([B, U]) => <button key={B} onClick={() => z(B)} style={{
       flex: 1,
       background: O === B ? theme.pull : "transparent",
       border: "none",
@@ -481,7 +484,7 @@ export function ProgramEditor({
       color: theme.muted,
       marginTop: 6,
       lineHeight: 1.5
-    }}>{O === "template" ? "Changes here apply to all future unlogged sessions." : "Create week-specific overrides for individual sessions."}</div>}</div>}{O === "template" && <div style={{
+    }}>{O === "template" ? "Changes here apply to all future unlogged sessions." : O === "weeks" ? "Create week-specific overrides for individual sessions." : "Compare your target focus with what your routine plans."}</div>}</div>}{O === "focus" && <FocusView settings={n} days={Ut} overrides={y} phases={lp} routine={a} focus={fz} onChange={nf => { setFz(nf); h(true); }} />}{O === "template" && <div style={{
       flex: 1,
       overflowY: "auto",
       padding: "12px 16px 40px"
